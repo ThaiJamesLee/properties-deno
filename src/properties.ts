@@ -80,7 +80,7 @@ class Properties {
     private mapToString(input:Map<string, string>) {
         let result: string = "";
 
-        input.forEach((key, value) => {
+        input.forEach((value, key) => {
             result += `${key}=${value}\n`;
         });
 
