@@ -9,13 +9,25 @@ class Properties {
 
     constructor(properties?: Map<string, string>) {
         if(properties) {
+            this.validateKeys(properties);
             this.properties = properties;
         } else {
             this.properties = new Map();
         }
     }
 
-    // @desc writes the values of the map in a .properties file.
+    private validateKeys(map:Map<string, string>) {
+        map.forEach((key, values) => {
+            if(!keyIsValid(sanitizeString(key))) {
+                throw new InvalidPropertyKeyError('Keys can not be empty or contain whitespaces!');
+            }
+        });
+    }
+
+    /**
+     * Writes the values of the map in a .properties file.
+     * @param filePath The .properties file path where the properties should be written.
+     */
     async store(filePath: string) {
         requiresPropertyFileEnding(filePath);
 
@@ -26,9 +38,19 @@ class Properties {
         } 
     }
 
-    // @desc Reads a .properties file and store the key value pairs in a map. The keys can not be empty or contain whitespaces.
+
+    /**
+     * Reads a .properties file and store the key value pairs in a map. 
+     * The keys can not be empty or contain whitespaces.
+     * On load the old properties will be discarded.
+     * 
+     * @param filePath The path of the .properties that should be loaeded.
+     */
     async load(filePath: string) {
         requiresPropertyFileEnding(filePath);
+
+        this.properties = new Map();
+
         let decoder = new TextDecoder('utf-8');
         let rawProperties:string = decoder.decode(await Deno.readFile(filePath));
 
@@ -43,12 +65,12 @@ class Properties {
                 
                 if(keyIsValid(key)) {
                     if(!this.properties.has(key)) {
-                        this.properties.set(key, value);
+                        this.properties.set(key, value.trimStart().trimEnd());
                     } else {
                         throw new DuplicateKeyError('A properties file can not contain multiple keys of the same name!');
                     }
                 } else {
-                    throw new InvalidPropertyKeyError('Keys can not be empty!');
+                    throw new InvalidPropertyKeyError('Keys can not be empty or contain whitespaces!');
                 }
             }
         });
