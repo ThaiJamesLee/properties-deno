@@ -1,0 +1,22 @@
+{
+  "$schema": "https://x.nest.land/eggs@0.3.0/src/schema.json",
+  "name": "properties_deno",
+  "entry": "mod.ts",
+  "description": "A tool to read and write .properties files.",
+  "version": "v0.1.0",
+  "unstable": true,
+  "files": [
+    "./src/*",
+    "./LICENSE",
+    "./README.md"
+  ],
+  "ignore": [
+    ".github",
+    ".vscode",
+    ".git"
+  ],
+  "checkFormat": false,
+  "checkTests": false,
+  "checkInstallation": false,
+  "check": true
+}
