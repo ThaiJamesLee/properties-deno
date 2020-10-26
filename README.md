@@ -1,4 +1,5 @@
-![CI](https://github.com/ThaiJamesLee/properties-deno/workflows/CI/badge.svg)
+![CI](https://github.com/ThaiJamesLee/properties-deno/workflows/CI/badge.svg) [![nest badge](https://nest.land/badge.svg)](https://nest.land/package/properties_deno)
+
 
 # properties-deno
 
