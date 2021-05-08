@@ -16,7 +16,7 @@ class Properties {
         }
     }
 
-    private validateKeys(map:Map<string, string>) {
+    private validateKeys(map:Map<string, string>):void {
         map.forEach((key, values) => {
             if(!keyIsValid(sanitizeString(key))) {
                 throw new InvalidPropertyKeyError('Keys can not be empty or contain whitespaces!');
@@ -28,7 +28,7 @@ class Properties {
      * Writes the values of the map in a .properties file.
      * @param filePath The .properties file path where the properties should be written.
      */
-    async store(filePath: string) {
+    async store(filePath: string):Promise<void> {
         requiresPropertyFileEnding(filePath);
 
         let propertiesInput = this.mapToString(this.properties);
@@ -46,7 +46,7 @@ class Properties {
      * 
      * @param filePath The path of the .properties that should be loaeded.
      */
-    async load(filePath: string) {
+    async load(filePath: string):Promise<void> {
         requiresPropertyFileEnding(filePath);
 
         this.properties = new Map();
@@ -54,7 +54,12 @@ class Properties {
         let decoder = new TextDecoder('utf-8');
         let rawProperties:string = decoder.decode(await Deno.readFile(filePath));
 
-        let propertyLine: string[] = rawProperties.split("\n");
+        this.parse(rawProperties);
+    }
+
+    public parse(text:string):void
+    {
+        let propertyLine: string[] = text.split("\n");
     
         propertyLine.forEach(element => {
             if(element.match(/.+=.+/)) {
@@ -74,10 +79,9 @@ class Properties {
                 }
             }
         });
-
     }
 
-    private mapToString(input:Map<string, string>) {
+    private mapToString(input:Map<string, string>):string {
         let result: string = "";
 
         input.forEach((value, key) => {
@@ -90,7 +94,7 @@ class Properties {
 }
 
 // assume already sanitizeString method called
-function keyIsValid(key: string) {
+function keyIsValid(key: string):boolean {
     if(key) {
         if(key.match(/\s+/)) {
             return false;
@@ -100,7 +104,7 @@ function keyIsValid(key: string) {
     return false;
 }
 
-function sanitizeString(s: string) {
+function sanitizeString(s: string):string {
     if(s.startsWith(" ")) {
         s = s.trimLeft();
     } 
