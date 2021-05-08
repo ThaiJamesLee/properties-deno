@@ -7,15 +7,15 @@ const __dirname = dirname(import.meta);
 
 const testfiles = [
     {
-        file: "./testfile.properties",
+        file: __dirname + "testfile.properties",
         content: "A_KEY=A test key.\nA_SECOND_KEY =A second test key.\nA_THIRD_KEY = A third test key.\n\nA_FOURTH_KEY= A fourth test key.        \n"
     },
     {
-        file: "./testfile2.properties",
+        file: __dirname + "testfile2.properties",
         content: " = a test value\n= test value 2\nA Key = Test Value 3"
     },
     {
-        file: "./testfile3.properties",
+        file: __dirname + "testfile3.properties",
         content: "A_KEY=A test key.\nA_SECOND_KEY =A second test key.\nA_THIRD_KEY = A third test key.\n\n\nA_FOURTH_KEY= A fourth test key.\nA_FIFTH_KEY =a fifth test key\nA_SECOND_KEY =the second test key a second time."
     }
 ]
@@ -26,7 +26,7 @@ Deno.test("Assert Throws InvalidPropertyKeyError", async function (): Promise<vo
     await assertThrowsAsync(
         async (): Promise<void> => {
             await Deno.writeTextFile(testfiles[1].file, testfiles[1].content);
-            await props.load("./testfile2.properties");
+            await props.load(testfiles[1].file);
         },
         InvalidPropertyKeyError,
         "Keys can not be empty or contain whitespaces!",
@@ -42,7 +42,7 @@ Deno.test("Assert Throws InvalidPropertyKeyError", async function (): Promise<vo
         InvalidPropertyKeyError,
         "Keys can not be empty or contain whitespaces!",
     );
-    await Deno.remove("./testfile2.properties");
+    await Deno.remove(testfiles[1].file);
 });
 
 
@@ -65,21 +65,20 @@ Deno.test("Assert Throws DuplicateKeyError", async function (): Promise<void> {
     await assertThrowsAsync(
         async (): Promise<void> => {
             await Deno.writeTextFile(testfiles[2].file, testfiles[2].content);
-            await props.load("./testfile3.properties");
+            await props.load(testfiles[2].file);
         },
         DuplicateKeyError,
         "A properties file can not contain multiple keys of the same name!",
       );
-      await Deno.remove("./testfile3.properties");
+      await Deno.remove(testfiles[2].file);
 });
 
 
 Deno.test("Assert Loading Test", async () => {
     const properties = new Properties()
-    const filePath = __dirname + "testfile.properties"
-    await Deno.writeTextFile(filePath, testfiles[0].content);
+    await Deno.writeTextFile(testfiles[0].file, testfiles[0].content);
     
-    await properties.load(filePath);
+    await properties.load(testfiles[0].file);
     const propertyMap = properties.properties;
 
     assertEquals(propertyMap.get("A_KEY"), "A test key.");
@@ -87,6 +86,6 @@ Deno.test("Assert Loading Test", async () => {
     assertEquals(propertyMap.get("A_THIRD_KEY"), "A third test key.");
     assertEquals(propertyMap.get("A_FOURTH_KEY"), "A fourth test key.");
 
-    await Deno.remove(filePath);
+    await Deno.remove(testfiles[0].file);
 });
 
