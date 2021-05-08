@@ -1,8 +1,9 @@
-import { Properties } from "./properties.ts";
-import { DuplicateKeyError, InvalidPropertyKeyError, NotAPropertiesFileError } from "./properties_error.ts";
-import { assertThrowsAsync, assertEquals } from "https://deno.land/std@0.74.0/testing/asserts.ts"
+import { Properties } from "../src/properties.ts";
+import { DuplicateKeyError, InvalidPropertyKeyError, NotAPropertiesFileError } from "../src/properties_error.ts";
+import { assertThrowsAsync, assertEquals } from "https://deno.land/std@0.95.0/testing/asserts.ts";
+import dirname from "https://x.nest.land/denoname@0.8.2/mod/dirname.ts";
  
-const props = new Properties();
+const __dirname = dirname(import.meta);
 
 const testfiles = [
     {
@@ -20,6 +21,8 @@ const testfiles = [
 ]
 
 Deno.test("Assert Throws InvalidPropertyKeyError", async function (): Promise<void> {
+    const props = new Properties();
+
     await assertThrowsAsync(
         async (): Promise<void> => {
             await Deno.writeTextFile(testfiles[1].file, testfiles[1].content);
@@ -44,6 +47,8 @@ Deno.test("Assert Throws InvalidPropertyKeyError", async function (): Promise<vo
 
 
 Deno.test("Assert Throws NotAPropertiesFileError", async function (): Promise<void> {
+    const props = new Properties();
+
     await assertThrowsAsync(
         async (): Promise<void> => {
             await props.load("./testfile2.props");
@@ -55,6 +60,8 @@ Deno.test("Assert Throws NotAPropertiesFileError", async function (): Promise<vo
 
 
 Deno.test("Assert Throws DuplicateKeyError", async function (): Promise<void> {
+    const props = new Properties();
+
     await assertThrowsAsync(
         async (): Promise<void> => {
             await Deno.writeTextFile(testfiles[2].file, testfiles[2].content);
@@ -68,16 +75,18 @@ Deno.test("Assert Throws DuplicateKeyError", async function (): Promise<void> {
 
 
 Deno.test("Assert Loading Test", async () => {
-    await Deno.writeTextFile(testfiles[0].file, testfiles[0].content);
-
-    await props.load("./testfile.properties");
-    let propertyMap = props.properties;
+    const properties = new Properties()
+    const filePath = __dirname + "testfile.properties"
+    await Deno.writeTextFile(filePath, testfiles[0].content);
+    
+    await properties.load(filePath);
+    const propertyMap = properties.properties;
 
     assertEquals(propertyMap.get("A_KEY"), "A test key.");
     assertEquals(propertyMap.get("A_SECOND_KEY"), "A second test key.");
     assertEquals(propertyMap.get("A_THIRD_KEY"), "A third test key.");
     assertEquals(propertyMap.get("A_FOURTH_KEY"), "A fourth test key.");
 
-    await Deno.remove("./testfile.properties");
+    await Deno.remove(filePath);
 });
 
