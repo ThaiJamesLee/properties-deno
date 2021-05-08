@@ -13,8 +13,7 @@
   "ignore": [
     ".github",
     ".vscode",
-    ".git",
-    "tests"
+    ".git"
   ],
   "checkFormat": false,
   "checkTests": false,
