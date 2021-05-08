@@ -3,7 +3,7 @@
   "name": "properties_deno",
   "entry": "mod.ts",
   "description": "A tool to read and write .properties files.",
-  "version": "v0.1.0",
+  "version": "v0.2.0",
   "unstable": true,
   "files": [
     "./src/*",
