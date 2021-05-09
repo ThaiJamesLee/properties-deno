@@ -1,4 +1,4 @@
-import { DuplicateKeyError, InvalidPropertyKeyError, NotAPropertiesFileError } from "./properties_error.ts";
+import { DuplicateKeyError, InvalidPropertyKeyError, NotAPropertiesFileError } from "./propertiesError.ts";
 import { keyIsValid, mapToString, requiresPropertyFileEnding, sanitizeString } from "./utils.ts"
 
 class Properties {

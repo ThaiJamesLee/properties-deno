@@ -1,9 +1,10 @@
 import { Properties } from "../src/properties.ts";
-import { DuplicateKeyError, InvalidPropertyKeyError, NotAPropertiesFileError } from "../src/properties_error.ts";
+import { DuplicateKeyError, InvalidPropertyKeyError, NotAPropertiesFileError } from "../src/propertiesError.ts";
 import { assertThrowsAsync, assertEquals } from "https://deno.land/std@0.95.0/testing/asserts.ts";
-import dirname from "https://x.nest.land/denoname@0.8.2/mod/dirname.ts";
  
-const __dirname = dirname(import.meta);
+const __dirname = './'
+
+console.log(__dirname)
 
 const testfiles = [
     {

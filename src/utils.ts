@@ -1,5 +1,5 @@
 import { PROPERTIES_FILE_ENDING } from "./constants.ts"
-import { NotAPropertiesFileError } from "./properties_error.ts"
+import { NotAPropertiesFileError } from "./propertiesError.ts"
 
 /**
  * Removes empty spaces left and right of the string.
