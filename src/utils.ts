@@ -29,9 +29,14 @@ export function mapToString(input: Map<string, string>):string {
     return result;
 }
 
-// assume already sanitizeString method called
-export function keyIsValid(key: string):boolean {
+/**
+ * Check if the string is a valid property key.
+ * @param key The string to check.
+ * @returns Returns true if the string is a valid property key. Otherwise, return false.
+ */
+export function keyIsValid(key?: string):boolean {
     if(key) {
+        // Contains white space.
         if(key.match(/\s+/)) {
             return false;
         }
@@ -40,7 +45,11 @@ export function keyIsValid(key: string):boolean {
     return false;
 }
 
-
+/**
+ * Check if file path is a properties file.
+ * Throws an {@link NotAPropertiesFileError} if it is not the case.
+ * @param path File path to check.
+ */
 export function requiresPropertyFileEnding(path: string): void {
     if(!path.endsWith(PROPERTIES_FILE_ENDING)) {
         throw new NotAPropertiesFileError("A properties file must have the file-ending of .properties!");
