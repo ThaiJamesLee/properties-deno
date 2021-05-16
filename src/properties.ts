@@ -75,6 +75,7 @@ class Properties {
                 // Index 0 contains key and index 1 contains value
                 const tokens: string[] = element.split("=");
                 const key: string = sanitizeString(tokens[0]);
+                // Fallback if value is undefined to empty string
                 const value: string = tokens[1] || ""
                 
                 if(keyIsValid(key)) {
