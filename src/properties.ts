@@ -1,6 +1,9 @@
 import { DuplicateKeyError, InvalidPropertyKeyError, NotAPropertiesFileError } from "./propertiesError.ts";
 import { keyIsValid, mapToString, requiresPropertyFileEnding, sanitizeString } from "./utils.ts"
 
+/**
+ * Proprties class to create and load .properties files.
+ */
 class Properties {
 
     public properties: Map<string, string>;
