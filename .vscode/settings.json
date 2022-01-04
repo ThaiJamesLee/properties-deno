@@ -1,5 +1,9 @@
 {
-    "editor.insertSpaces": false,
-    "typescript.tsc.autoDetect": "off",
-    "typescript.preferences.quoteStyle": "double"
-  }
+  "editor.insertSpaces": false,
+  "typescript.tsc.autoDetect": "off",
+  "typescript.preferences.quoteStyle": "double",
+  "editor.defaultFormatter": "denoland.vscode-deno",
+  "deno.suggest.imports.autoDiscover": true,
+  "deno.codeLens.test": true,
+  "deno.enable": true
+}
