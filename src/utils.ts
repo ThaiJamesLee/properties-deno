@@ -6,10 +6,10 @@ import { NotAPropertiesFileError } from "./propertiesError.ts"
  */
 export function sanitizeString(s: string):string {
     if(s.startsWith(" ")) {
-        s = s.trimLeft();
+        s = s.trimStart();
     } 
     if(s.endsWith(" ")) {
-        s = s.trimRight();
+        s = s.trimEnd();
     }
     return s;
 }
@@ -19,14 +19,14 @@ export function sanitizeString(s: string):string {
  * @param input A map of property key and values.
  * @returns Returns a string with concatenated key value pairs with line breaks.
  */
-export function mapToString(input: Map<string, string>):string {
-    let result: string = "";
+export function mapToString(input: Record<string, string>):string {
+    const result: string[] = [];
 
-    input.forEach((value, key) => {
-        result += `${key}=${value}\n`;
-    });
+    for(const [key, value] of Object.entries(input)) {
+        result.push(`${key}=${value}`)
+    }
 
-    return result;
+    return result.join('\n');
 }
 
 /**
@@ -35,14 +35,11 @@ export function mapToString(input: Map<string, string>):string {
  * @returns Returns true if the string is a valid property key. Otherwise, return false.
  */
 export function keyIsValid(key?: string):boolean {
-    if(key) {
-        // Contains white space.
-        if(key.match(/\s+/)) {
-            return false;
-        }
-        return true;
+    if(!key) {
+        return false
     }
-    return false;
+    // Contains white space.
+    return !key.match(/\s+/);
 }
 
 /**

@@ -1,24 +1,28 @@
-import { DuplicateKeyError, InvalidPropertyKeyError, NotAPropertiesFileError } from "./propertiesError.ts";
+import { DuplicateKeyError, InvalidPropertyKeyError } from "./propertiesError.ts";
 import { keyIsValid, mapToString, requiresPropertyFileEnding, sanitizeString } from "./utils.ts"
+
+export interface IProperties {
+    [key: string]: string
+}
 
 /**
  * Proprties class to create and load .properties files.
  */
-class Properties {
+export class Properties {
 
-    public properties: Map<string, string>;
+    public properties: IProperties;
 
     /**
      * Constructs a property instance. 
      * Optionally with a given Map.
      * @param properties Optional argument. Initializes a new map if no Map is passed.
      */
-    constructor(properties?: Map<string, string>) {
+    constructor(properties?: IProperties) {
         if(properties) {
-            this.validateKeys(properties);
-            this.properties = properties;
+            this.validateKeys(properties)
+            this.properties = properties
         } else {
-            this.properties = new Map();
+            this.properties = {}
         }
     }
 
@@ -26,12 +30,12 @@ class Properties {
      * Check the keys of the given Map.
      * @param map Map to be checked.
      */
-    private validateKeys(map: Map<string, string>): void {
-        map.forEach((key, values) => {
-            if(!keyIsValid(sanitizeString(key))) {
-                throw new InvalidPropertyKeyError('Keys can not be empty or contain whitespaces!');
+    private validateKeys(map: IProperties): void {
+        for (const key of Object.keys(map)) {
+            if (!keyIsValid(sanitizeString(key))) {
+                throw new InvalidPropertyKeyError('Keys can not be empty or contain whitespaces!')
             }
-        });
+        }
     }
 
     /**
@@ -82,8 +86,8 @@ class Properties {
                 const value: string = tokens[1] || ""
                 
                 if(keyIsValid(key)) {
-                    if(!this.properties.has(key)) {
-                        this.properties.set(key, value.trimStart().trimEnd());
+                    if(!this.properties[key]) {
+                        this.properties[key] = value.trimStart().trimEnd();
                     } else {
                         throw new DuplicateKeyError('A properties file can not contain multiple keys of the same name!');
                     }
@@ -94,5 +98,3 @@ class Properties {
         });
     }
 }
-
-export { Properties }
