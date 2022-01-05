@@ -17,20 +17,13 @@ export interface IProperties {
  * Proprties class to create and load .properties files.
  */
 export class Properties {
-  public properties: IProperties;
-
   /**
    * Constructs a property instance.
    * Optionally with a given Map.
    * @param properties Optional argument. Initializes a new map if no Map is passed.
    */
-  constructor(properties?: IProperties) {
-    if (properties) {
-      this.validateKeys(properties);
-      this.properties = properties;
-    } else {
-      this.properties = {};
-    }
+  constructor(public readonly properties: IProperties = {}) {
+    this.validateKeys(properties);
   }
 
   /**
