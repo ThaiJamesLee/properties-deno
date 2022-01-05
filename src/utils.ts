@@ -1,17 +1,17 @@
-import { PROPERTIES_FILE_ENDING } from "./constants.ts"
-import { NotAPropertiesFileError } from "./propertiesError.ts"
+import { PROPERTIES_FILE_ENDING } from "./constants.ts";
+import { NotAPropertiesFileError } from "./propertiesError.ts";
 
 /**
  * Removes empty spaces left and right of the string.
  */
-export function sanitizeString(s: string):string {
-    if(s.startsWith(" ")) {
-        s = s.trimLeft();
-    } 
-    if(s.endsWith(" ")) {
-        s = s.trimRight();
-    }
-    return s;
+export function sanitizeString(s: string): string {
+  if (s.startsWith(" ")) {
+    s = s.trimStart();
+  }
+  if (s.endsWith(" ")) {
+    s = s.trimEnd();
+  }
+  return s;
 }
 
 /**
@@ -19,14 +19,14 @@ export function sanitizeString(s: string):string {
  * @param input A map of property key and values.
  * @returns Returns a string with concatenated key value pairs with line breaks.
  */
-export function mapToString(input: Map<string, string>):string {
-    let result: string = "";
+export function mapToString(input: Record<string, string>): string {
+  const result: string[] = [];
 
-    input.forEach((value, key) => {
-        result += `${key}=${value}\n`;
-    });
+  for (const [key, value] of Object.entries(input)) {
+    result.push(`${key}=${value}`);
+  }
 
-    return result;
+  return result.join("\n");
 }
 
 /**
@@ -34,15 +34,12 @@ export function mapToString(input: Map<string, string>):string {
  * @param key The string to check.
  * @returns Returns true if the string is a valid property key. Otherwise, return false.
  */
-export function keyIsValid(key?: string):boolean {
-    if(key) {
-        // Contains white space.
-        if(key.match(/\s+/)) {
-            return false;
-        }
-        return true;
-    }
+export function keyIsValid(key?: string): boolean {
+  if (!key) {
     return false;
+  }
+  // Contains white space.
+  return !key.match(/\s+/);
 }
 
 /**
@@ -51,7 +48,9 @@ export function keyIsValid(key?: string):boolean {
  * @param path File path to check.
  */
 export function requiresPropertyFileEnding(path: string): void {
-    if(!path.endsWith(PROPERTIES_FILE_ENDING)) {
-        throw new NotAPropertiesFileError("A properties file must have the file-ending of .properties!");
-    }
+  if (!path.endsWith(PROPERTIES_FILE_ENDING)) {
+    throw new NotAPropertiesFileError(
+      "A properties file must have the file-ending of .properties!",
+    );
+  }
 }
